@@ -10,17 +10,10 @@
         style="position: absolute; height: 25%"
       >
         <div class="container">
-          <h1>
-            <a href="Home">
-              <img
-                src="./assets/img/vecteezy_dd-d-and-d-abstract-initial-monogram-letter-alphabet-logo_6150819.png"
-                style="
-                  /*opacity: &amp;;*/
-                  opacity: 1;
-                  color: var(--bs-yellow);
-                " /></a
-            >
-          </h1>
+          <h3>
+             SavannahTech
+            
+          </h3>
           
           <button
             data-bs-toggle="collapse"

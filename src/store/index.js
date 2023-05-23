@@ -43,7 +43,6 @@ export default new Vuex.Store({
       state.authors = payload;
     },
     addToCart(state, payload) {
-      console.log(payload);
       state.inCart.push(payload);
     },
     removeFromCart(state, item) {
@@ -61,9 +60,7 @@ export default new Vuex.Store({
       state.user.token = payload.token;
       
     },
-    SET_PARTNER(state, partner) {
-      state.user.partner = partner;
-    },
+   
     setUrls(state) {
      
       state.endpoints.login = 'login'
@@ -71,27 +68,7 @@ export default new Vuex.Store({
     }
   },
   actions: { 
-    // async getProducts(state) {
-    //   let accessToken = state.user.token;
-    //   let Authorization = 'Bearer '.concat(accessToken);
-    //   let headers = { Accept: "application/json", Authorization };
-    //   console.log(headers);
-    //   const products = await fetch(url+'books', { headers });
-    //   const prods = await products.json();
-    //   console.log(prods.data);
-    //   state.commit("setProducts", prods.data);
-    //   console.log(prods.data);
-    // },
-    // async getAuthor(state) {
-    //   let accessToken = state.user.token;
-    //   let Authorization = 'Bearer '.concat(accessToken);
-    //   let headers = { Accept: "application/json", Authorization };
-    //   const res = await fetch(url+'authors', { headers });
-    //   const authors = await res.json();
-    //   console.log(authors.data);
-    //   state.commit("setAuthors", authors.data);
-    //   console.log(authors.data);
-    // },
+   
     getAuthor(state ) {
       let furl = url+'authors';
       let accessToken = state.state.user.token;
@@ -107,19 +84,17 @@ export default new Vuex.Store({
        
       })
         .then(response => {
-          console.log('Response:', response);
-          state.commit("setAuthors", response.data);
+          state.commit("setAuthors", response.data.data);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
     },
     getProducts(state ) {
-      console.log(state)
       let bookurl = url+'books';
-      console.log('bookurl',bookurl)
+      
       let accessToken = state.state.user.token;
-      console.log('accessToken',accessToken)
+      
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(bookurl, {
         method: 'GET',
@@ -132,8 +107,32 @@ export default new Vuex.Store({
        
       })
         .then(response => {
+          state.commit("setProducts", response.data.data);
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    },
+    deleteBook(state,id ) {
+      let bookurl = url+'books/'+id;
+      
+      let accessToken = state.state.user.token;
+      
+      const AuthStr = 'Bearer '.concat(accessToken);
+      axios(bookurl, {
+        method: 'Delete',
+        headers: {
+          'Accept': '*/*',
+          'Content-Type': 'application/json',
+          'Authorization': AuthStr
+        },
+        credentials: 'include',
+       
+      })
+        .then(response => {
           console.log('Response:', response);
-          state.commit("setProducts", response.data);
+          state.dispatch("getProducts");
+          
         })
         .catch((error) => {
           console.error('Error:', error);
@@ -162,11 +161,8 @@ export default new Vuex.Store({
     },
     registerBook({ state }, obj) {
       let bookurl = url+'books';
-      console.log(bookurl);
       let accessToken = state.user.token;
       const AuthStr = 'Bearer '.concat(accessToken);
-      console.log(AuthStr);
-      console.log(obj);
       axios(bookurl, {
         method: 'POST',
         headers: {
@@ -179,6 +175,7 @@ export default new Vuex.Store({
       })
         .then(response => {
           console.log('Response:', response);
+          // dispatch("getProducts");
         })
         .catch((error) => {
           console.error('Error:', error);

@@ -68,7 +68,33 @@
             
             <button type="submit" class="btn btn-primary"  value="register">Submit</button>
           </form>
-        </div>     
+        </div> 
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>title</th>
+                 <th>description</th>
+                <th>price</th>
+                <th>publish date</th>
+                <th>Author</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(post, i) in products" :key="post.id">
+                    <td>{{ i+1 }}</td>
+                    <td>{{ post.title }}</td>
+                    <td>{{ post.description }}</td>
+                    <td>{{ post.price }}</td>
+                    <td>{{ post.publish_date }}</td>
+                    <td>{{ post.author }}</td>
+                    <td><a  @click="deleteBook($event, post.id)" class="btn btn-danger">delete</a></td>
+                    
+                  
+                </tr>
+            </tbody>
+        </table>    
       </div>
     </section>
    
@@ -96,7 +122,12 @@ export default {
     }
     this.$store.dispatch("getAuthors");
   },
+  
+    
   computed: {
+  products() {
+      return this.$store.state.products;
+    },
     authors() {
       return this.$store.state.authors;
     },
@@ -115,6 +146,10 @@ export default {
             author_id,
             price
           });
+    },
+     async deleteBook(e,id) {
+      console.log(id)
+      this.$store.dispatch("deleteBook",id);
     }
   }
 };
