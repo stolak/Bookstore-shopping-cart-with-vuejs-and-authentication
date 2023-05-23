@@ -10,7 +10,7 @@
        <div class="container">
         <div class="row">
           <div class="col-lg-8 text-center mx-auto">
-            <h2 class="section-heading">LOGIN</h2>
+            <h2 class="section-heading">Create New Book</h2>
             <hr class="my-4" />
           </div>
           <form class="formform" @submit.prevent="register">

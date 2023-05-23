@@ -13,9 +13,7 @@
         <div class="row projects">
           <Item v-for="product in products" :key="product.id" :item="product" />
         </div>
-        <a class="btn btn-primary btn-xl" role="button" href="#services"
-          >See more!</a
-        >
+        
       </div>
     </div>
   </body>
