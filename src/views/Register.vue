@@ -87,7 +87,7 @@ export default {
     async register() {
       const { name, password, c_password, email } = this;
       const res = await fetch(
-        "http://127.0.0.1:8000/api/register",
+       this.$store.state.url1+'register',
         {
           method: "POST",
           headers: {
@@ -103,6 +103,12 @@ export default {
       );
       const data = await res.json();
       console.log(data);
+      if(data.success){
+       localStorage.setItem('token', JSON.stringify(data.data));
+      
+       this.$store.commit("login", data.data);
+       this.$router.push("/Shopping");
+       }
     } 
   }
 };

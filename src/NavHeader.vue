@@ -30,7 +30,7 @@
             <ul class="navbar-nav ms-auto">
               
               
-              <li class="nav-item"  v-if="isAuthenticated">
+              <li class="nav-item" >
                 <a class="nav-link" href="shopping" style="color: white"
                   >Shopping</a
                 >
@@ -107,6 +107,7 @@ import ShoppingCart from "./ShoppingCart.vue";
 export default {
   components: { ShoppingCart },
   name: "NavHeader",
+  props: ["page","redirect"],
   computed: {
     userEmail() {
       return this.isLoggedIn ? this.currentUser.email : "";

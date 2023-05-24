@@ -111,9 +111,11 @@ export default {
     return {
       title: "",
       description: "",
-      publish_date: "",
+      publish_date: "2023-01-01",
       author_id: "",
-      price: ""
+      price: "",
+      page: "Books",
+      redirect: "books",
     };
   },
   mounted() {

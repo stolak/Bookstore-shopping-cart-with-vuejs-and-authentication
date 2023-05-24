@@ -30,9 +30,7 @@ export default {
     
   },
   mounted() {
-    if (!this.$store.state.user.isAuthenticated) {
-      this.$router.push("/login");
-    }
+    
   },
   components: {
     NavHeader,
@@ -40,7 +38,7 @@ export default {
   },
   data() {
     return {
-      page: "Builder",
+      page: "Shopping",
       redirect: "Home",
     };
   },

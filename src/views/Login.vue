@@ -85,7 +85,7 @@ console.log(payload)
     async login() {
       const { email, password } = this;
       const res = await fetch(
-        "http://127.0.0.1:8000/api/login",
+        this.$store.state.url1+ 'login',
         {
           method: "POST",
           headers: {

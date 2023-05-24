@@ -6,15 +6,16 @@ import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
-const url = "http://127.0.0.1:8000/api/"; //"http://springboot-productservice-ucllteam15.ucll-ocp-40cb0df2b03969eabb3fac6e80373775-0000.eu-de.containers.appdomain.cloud/products";
+// const url = "http://127.0.0.1:8000/api/"; //"http://springboot-productservice-ucllteam15.ucll-ocp-40cb0df2b03969eabb3fac6e80373775-0000.eu-de.containers.appdomain.cloud/products";
 // const headers = { Accept: "application/json" };
-
+// const url = "http://predict.xchangebox.com.ng/public/api/"
 export default new Vuex.Store({
   plugins: [createPersistedState()],
   state: {
     products: [],
     authors: [],
     inCart: [],
+    url1 : "http://127.0.0.1:8000/api/", // "http://predict.xchangebox.com.ng/public/api/",
     user: {
       isAuthenticated: false,
       name: "",
@@ -69,9 +70,9 @@ export default new Vuex.Store({
   },
   actions: { 
    
-    getAuthor(state ) {
-      let furl = url+'authors';
-      let accessToken = state.state.user.token;
+    getAuthor({state,commit} ) {
+      let furl = state.url1+'authors';
+      let accessToken = state.user.token;
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(furl, {
         method: 'GET',
@@ -84,16 +85,16 @@ export default new Vuex.Store({
        
       })
         .then(response => {
-          state.commit("setAuthors", response.data.data);
+          commit("setAuthors", response.data.data);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
     },
-    getProducts(state ) {
-      let bookurl = url+'books';
+    getProducts({state, commit }) {
+      let bookurl = state.url1+'books';
       
-      let accessToken = state.state.user.token;
+      let accessToken = state.user.token;
       
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(bookurl, {
@@ -107,14 +108,14 @@ export default new Vuex.Store({
        
       })
         .then(response => {
-          state.commit("setProducts", response.data.data);
+          commit("setProducts", response.data.data);
         })
         .catch((error) => {
           console.error('Error:', error);
         });
     },
     deleteBook(state,id ) {
-      let bookurl = url+'books/'+id;
+      let bookurl = state.url1+'books/'+id;
       
       let accessToken = state.state.user.token;
       
@@ -139,7 +140,7 @@ export default new Vuex.Store({
         });
     },
     registerAuthor({ state }, obj) {
-      let bookurl = url+'authors';
+      let bookurl = state.url1+'authors';
       let accessToken = state.user.token;
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(bookurl, {
@@ -159,8 +160,8 @@ export default new Vuex.Store({
           console.error('Error:', error);
         });
     },
-    registerBook({ state }, obj) {
-      let bookurl = url+'books';
+    registerBook({ state, dispatch }, obj) {
+      let bookurl = state.url1+'books';
       let accessToken = state.user.token;
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(bookurl, {
@@ -175,7 +176,8 @@ export default new Vuex.Store({
       })
         .then(response => {
           console.log('Response:', response);
-          // dispatch("getProducts");
+          dispatch("getProducts");
+          
         })
         .catch((error) => {
           console.error('Error:', error);
