@@ -86,7 +86,7 @@
                     </div>
                   </div>
                 </li>
-                <li v-if="isAuthenticated">
+                <li >
                   <ShoppingCart />
                 </li>
               </ul>

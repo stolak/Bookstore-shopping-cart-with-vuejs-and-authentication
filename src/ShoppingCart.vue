@@ -54,7 +54,7 @@ export default {
       return this.inCart.length; 
     },
     total() {
-      return this.inCart.reduce((acc, cur) => acc + cur.price, 0);
+      return this.inCart.reduce((acc, cur) => Number(acc) + Number(cur.price), 0);
     },
     isAuthenticated() {
       return this.$store.state.user.isAuthenticated;
