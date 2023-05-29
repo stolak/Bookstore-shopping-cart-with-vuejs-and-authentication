@@ -15,14 +15,20 @@ export default new Vuex.Store({
     products: [],
     authors: [],
     inCart: [],
-    url1 : "http://127.0.0.1:8000/api/", // "http://predict.xchangebox.com.ng/public/api/",
+    showSuccessAlert: false,
+    showErrorAlert: false,
+    successMessage: '',
+    errMessage: "",
+    url1 :  "http://127.0.0.1:8000/api/",
+    // url1 :  "http://predict.xchangebox.com.ng/public/api/",
     user: {
       isAuthenticated: false,
       name: "",
-      email: "",
+      email: "", 
       idToken: "",
       accessToken: "",
-      partner: false
+      partner: false,
+      
     },
     endpoints: {
       login: process.env.VUE_APP_AUTH_URL,
@@ -35,6 +41,10 @@ export default new Vuex.Store({
     products: state => state.products,
     authors: state => state.authors,
     inCart: state => state.inCart,
+    showSuccessAlert: state => state.showSuccessAlert,
+    showErrorAlert: state => state.showErrorAlert,
+    successMessage: state => state.successMessage,
+    errMessage: state => state.errMessage
   },
   mutations: { //synchronous
     setProducts(state, payload) {
@@ -61,6 +71,13 @@ export default new Vuex.Store({
       state.user.token = payload.token;
       
     },
+    set_notification(state,{showSuccessAlert, showErrorAlert, successMessage, errMessage}) {
+      state.showSuccessAlert = showSuccessAlert;
+      state.showErrorAlert = showErrorAlert;
+      state.successMessage = successMessage;
+      state.errMessage = errMessage;
+      
+    },
    
     setUrls(state) {
      
@@ -69,7 +86,22 @@ export default new Vuex.Store({
     }
   },
   actions: { 
-   
+    setNotification({ commit }, notification) {
+      commit('set_notification', notification);
+  
+      setTimeout(() => {
+        commit('set_notification', {
+          color: '',
+          message: '',
+          display: false,
+        });
+      }, 3000);
+    },
+    resetAlert({ commit }) {
+      commit('set_notification',{
+        showSuccessAlert:false, showErrorAlert:false, successMessage:'', errMessage:''
+      });
+    },
     getAuthor({state,commit} ) {
       let furl = state.url1+'authors';
       let accessToken = state.user.token;
@@ -114,10 +146,10 @@ export default new Vuex.Store({
           console.error('Error:', error);
         });
     },
-    deleteBook(state,id ) {
+    deleteBook({state, dispatch},id ) {
       let bookurl = state.url1+'books/'+id;
       
-      let accessToken = state.state.user.token;
+      let accessToken = state.user.token;
       
       const AuthStr = 'Bearer '.concat(accessToken);
       axios(bookurl, {
@@ -132,7 +164,7 @@ export default new Vuex.Store({
       })
         .then(response => {
           console.log('Response:', response);
-          state.dispatch("getProducts");
+          dispatch("getProducts");
           
         })
         .catch((error) => {

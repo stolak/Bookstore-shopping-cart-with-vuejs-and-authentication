@@ -11,7 +11,9 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-8 text-center mx-auto">
+          <Alert  />
             <h2 class="section-heading">LOGIN</h2>
+            
             <hr class="my-4" />
           </div>
           <form class="formform" @submit.prevent="login">
@@ -19,7 +21,7 @@
               <label class="text-left">Username</label>
               <input
                 class="form-control"
-v-model="email"	
+                v-model="email"	
                 placeholder="Enter email/Username"
               />
             </div>
@@ -28,11 +30,12 @@ v-model="email"
               <input
                 type="password"
                 class="form-control"
-v-model="password"
+                v-model="password"
                 placeholder="Enter Password"
               />
             </div>
-            <button type="submit" class="btn btn-primary"  value="login">Submit</button>
+            <button type="submit" class="btn btn-primary"  value="login">Submit</button><br>
+            <a class="" href="/register">New Account?</a>
           </form>
         </div>     
       </div>
@@ -42,46 +45,35 @@ v-model="password"
 
 <script>
 import NavHeader from "@/NavHeader.vue";
+import Alert from "@/components/Alert.vue";
+import { mapActions } from 'vuex';
 export default {
   name: "Login",
   components: {
     NavHeader,
+    Alert,
 
   },
   data() {
     return {
-      username: "",
+      page: "Login",
+      redirect: "Login",
       password: "",
-      firstName: "",
-      lastName: "",
-      age: "",
-      address: ""
+      email: ""
     };
   },
   beforeMount() {
-  if (
-      this.$store.state.user.isAuthenticated
-    ) {
-        this.$router.push("/Shopping");
-      } 
+    if ( this.$store.state.user.isAuthenticated) {
+       this.$router.push("/Shopping");
+    } 
     
   },
   mounted() {
-    let name = this.$route.query.name;
-    let email = this.$route.query.email;
-    
-
-    let payload = {
-      name: name,
-      email: email,
-    };
-console.log(payload)
-    
-
+   
     
   },
    methods: {
-    
+    ...mapActions(['setNotification']),
     async login() {
       const { email, password } = this;
       const res = await fetch(
@@ -98,14 +90,18 @@ console.log(payload)
           })
         }
       );
+      console.log('before',data);
       const data = await res.json();
-      console.log(data);
+      console.log('after', data);
       if(data.success){
-       localStorage.setItem('token', JSON.stringify(data.data));
-      
-       this.$store.commit("login", data.data);
-       this.$router.push("/Shopping");
-       }
+        localStorage.setItem('token', JSON.stringify(data.data));
+        this.setNotification({
+        showSuccessAlert:true, showErrorAlert:false, successMessage:'Login Successful', errMessage:'' });
+        this.$store.commit("login", data.data);
+        this.$router.push("/Shopping");
+      }else{
+        this.setNotification({showSuccessAlert:false, showErrorAlert:true, successMessage:'', errMessage:'Login failed'});
+      }
     }
   }
 };

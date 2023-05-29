@@ -95,8 +95,6 @@
           </div>
         </div>
       </nav>
-      
-      
     </div>
   </header>
 </template>
@@ -116,9 +114,16 @@ export default {
       return this.$store.state.user.isAuthenticated;
     },
   },
+  data() {
+      return {
+        dismissSecs: 10,
+        dismissCountDown: 0,
+        showDismissibleAlert: false
+      }
+    },
   methods: {
     onLogin() {
-      window.location = this.$store.state.endpoints.login;
+      window.location = '/login';
     },
      onRegister() {
       window.location = this.$store.state.endpoints.register;
